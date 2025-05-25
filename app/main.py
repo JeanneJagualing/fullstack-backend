@@ -1,8 +1,22 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from app import models, schemas, crud, database
 
 app = FastAPI()
+
+# Add CORS middleware
+origins = [
+    "*"  # For development/testing allow all origins; restrict in production
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods including OPTIONS
+    allow_headers=["*"],
+)
 
 # Create DB tables
 models.Base.metadata.create_all(bind=database.engine)
